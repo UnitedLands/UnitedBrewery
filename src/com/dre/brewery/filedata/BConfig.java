@@ -257,7 +257,6 @@ public class BConfig {
 		}
 
 		PluginItem.registerForConfig("brewery", BreweryPluginItem::new);
-		PluginItem.registerForConfig("mmoitems", MMOItemsPluginItem::new);
 		PluginItem.registerForConfig("slimefun", SlimefunPluginItem::new);
 		PluginItem.registerForConfig("exoticgarden", SlimefunPluginItem::new);
 
