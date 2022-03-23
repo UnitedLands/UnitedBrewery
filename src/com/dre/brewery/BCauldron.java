@@ -1,6 +1,7 @@
 package com.dre.brewery;
 
 import com.dre.brewery.api.events.IngedientAddEvent;
+import com.dre.brewery.api.events.PlayerFillBottleEvent;
 import com.dre.brewery.filedata.BConfig;
 import com.dre.brewery.recipe.BCauldronRecipe;
 import com.dre.brewery.recipe.RecipeItem;
@@ -237,6 +238,7 @@ public class BCauldron {
 			P.p.msg(player, P.p.languageReader.get("Error_NoPermissions"));
 			return;
 		}
+
 		BCauldron bcauldron = get(block);
 		if (bcauldron != null) {
 			if (bcauldron.state > 1) {
@@ -399,6 +401,8 @@ public class BCauldron {
 					if (bcauldron.fill(player, clickedBlock)) {
 						event.setCancelled(true);
 						if (player.hasPermission("brewery.cauldron.fill")) {
+							PlayerFillBottleEvent playerFillBottleEvent = new PlayerFillBottleEvent(player, item);
+							P.p.getServer().getPluginManager().callEvent(playerFillBottleEvent);
 							if (item.getAmount() > 1) {
 								item.setAmount(item.getAmount() - 1);
 							} else {
