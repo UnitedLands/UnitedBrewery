@@ -227,8 +227,8 @@ public class BCauldron {
 		// will delay the give
 		// but could also just use deprecated updateInventory()
 		giveItem(player, potion);
-		// player.getInventory().addItem(potion);
-		// player.getInventory().updateInventory();
+		PlayerFillBottleEvent playerFillBottleEvent = new PlayerFillBottleEvent(player, potion);
+		P.p.getServer().getPluginManager().callEvent(playerFillBottleEvent);
 		return true;
 	}
 
@@ -401,8 +401,6 @@ public class BCauldron {
 					if (bcauldron.fill(player, clickedBlock)) {
 						event.setCancelled(true);
 						if (player.hasPermission("brewery.cauldron.fill")) {
-							PlayerFillBottleEvent playerFillBottleEvent = new PlayerFillBottleEvent(player, item);
-							P.p.getServer().getPluginManager().callEvent(playerFillBottleEvent);
 							if (item.getAmount() > 1) {
 								item.setAmount(item.getAmount() - 1);
 							} else {
