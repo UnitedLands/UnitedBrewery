@@ -237,10 +237,6 @@ public class BrewLore {
 			return;
 		}
 		int quality = brew.getQuality();
-		if (quality == 12) {
-			Bukkit.broadcastMessage("THIS IS SUPPOSED TO BE A 6 STAR");
-		}
-		Bukkit.broadcastMessage(String.valueOf(quality));
 
 		if (quality > 0 && (qualityColor || BConfig.alwaysShowQuality)) {
 			int stars = quality / 2;
