@@ -12,10 +12,14 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +32,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.UUID;
 
 public class BUtil {
@@ -384,4 +389,40 @@ public class BUtil {
 		out.close();
 	}
 
+	public static boolean hasBrewery(Player player) {
+		FileConfiguration breweriesConfig = getBreweriesConfig();
+		String uuid = player.getUniqueId().toString();
+		Set<String> keys = breweriesConfig.getConfigurationSection("breweries").getKeys(true);
+
+		for (String key : keys) {
+			if (key.contains("owner-uuid") || key.contains("members")) {
+				if (uuid.equals(breweriesConfig.getString("breweries." + key)) ||
+					breweriesConfig.getStringList("breweries." + key).contains(uuid)) {
+					// MyBrand.owner-uuid -> [MyBrand, owner-uuid] -> MyBrand. Fuck this
+					String breweryName = key.split("\\.")[0];
+					String ownerUUID = breweriesConfig.getString("breweries." + breweryName + ".owner-uuid");
+					List<String> members = breweriesConfig.getStringList("breweries." + breweryName + ".members");
+					if (ownerUUID.equals(uuid) || members.contains(uuid)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private static Plugin getUnitedBrands() {
+		return Bukkit.getPluginManager().getPlugin("UnitedBrands");
+	}
+
+	public static FileConfiguration getBreweriesConfig() {
+		File breweryDataFile = new File(getUnitedBrands().getDataFolder(), "breweries.yml");
+		FileConfiguration breweryConfig = new YamlConfiguration();
+		try {
+			breweryConfig.load(breweryDataFile);
+		} catch (IOException | InvalidConfigurationException e) {
+			e.printStackTrace();
+		}
+		return breweryConfig;
+	}
 }

@@ -8,6 +8,7 @@ import com.dre.brewery.recipe.BEffect;
 import com.dre.brewery.recipe.BRecipe;
 import com.dre.brewery.recipe.PotionColor;
 import com.dre.brewery.utility.BUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.BrewerInventory;
@@ -53,6 +54,7 @@ public class Brew implements Cloneable {
 	private boolean stripped; // Most Brewing information removed, only drinking and rough quality information available. Brew should not change anymore
 	private int lastUpdate; // last update in hours after install time
 	private boolean needsSave; // There was a change that has not yet been saved
+	private boolean isBranded;
 
 	/**
 	 * A new Brew with only ingredients
@@ -65,11 +67,12 @@ public class Brew implements Cloneable {
 	/**
 	 * A Brew with quality, alc and recipe already set
 	 */
-	public Brew(int quality, int alc, BRecipe recipe, BIngredients ingredients) {
+	public Brew(int quality, int alc, BRecipe recipe, BIngredients ingredients, boolean isBranded) {
 		this.ingredients = ingredients;
 		this.quality = quality;
 		this.alc = alc;
 		this.currentRecipe = recipe;
+		this.isBranded = isBranded;
 		touch();
 	}
 
@@ -365,7 +368,7 @@ public class Brew implements Cloneable {
 					return 0;
 				}
 				// bad quality can decrease alc by up to 40%
-				alc *= 1 - ((float) (10 - quality) * 0.04f);
+				alc *= 1 - ((float) (12 - quality) * 0.04f);
 				// distillable Potions should have half alc after one and full alc after all needed distills
 				alc /= 2;
 				alc *= 1.0F + ((float) distillRuns / currentRecipe.getDistillRuns());
@@ -384,13 +387,18 @@ public class Brew implements Cloneable {
 	@Contract(pure = true)
 	public int calcQuality() {
 		// calculate quality from all of the factors
+
 		float quality = ingredients.getIngredientQuality(currentRecipe) + ingredients.getCookingQuality(currentRecipe, distillRuns > 0);
+		if (isBranded) {
+			quality += 2;
+		}
 		if (currentRecipe.needsToAge() || ageTime > 0.5) {
 			quality += ingredients.getWoodQuality(currentRecipe, wood) + ingredients.getAgeQuality(currentRecipe, ageTime);
 			quality /= 4;
 		} else {
 			quality /= 2;
 		}
+
 		return Math.round(quality);
 	}
 
@@ -1001,8 +1009,8 @@ public class Brew implements Cloneable {
 	}
 
 	public void saveToStream(DataOutputStream out) throws IOException {
-		if (quality > 10) {
-			quality = 10;
+		if (quality > 12) {
+			quality = 12;
 		}
 		alc = Math.min(alc, Short.MAX_VALUE);
 		alc = Math.max(alc, Short.MIN_VALUE);

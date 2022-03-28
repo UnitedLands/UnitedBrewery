@@ -7,10 +7,12 @@ import com.dre.brewery.recipe.BCauldronRecipe;
 import com.dre.brewery.recipe.BRecipe;
 import com.dre.brewery.recipe.Ingredient;
 import com.dre.brewery.recipe.ItemLoader;
-import com.dre.brewery.recipe.RecipeItem;
 import com.dre.brewery.recipe.PotionColor;
+import com.dre.brewery.recipe.RecipeItem;
+import com.dre.brewery.utility.BUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.jetbrains.annotations.Nullable;
@@ -101,7 +103,7 @@ public class BIngredients {
 	/**
 	 * returns an Potion item with cooked ingredients
 	 */
-	public ItemStack cook(int state) {
+	public ItemStack cook(int state, Player player) {
 
 		ItemStack potion = new ItemStack(Material.POTION);
 		PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
@@ -112,15 +114,19 @@ public class BIngredients {
 		String cookedName = null;
 		BRecipe cookRecipe = getCookRecipe();
 		Brew brew;
+		boolean isBranded = BUtil.hasBrewery(player);
 
 		//int uid = Brew.generateUID();
 
 		if (cookRecipe != null) {
 			// Potion is best with cooking only
 			int quality = (int) Math.round((getIngredientQuality(cookRecipe) + getCookingQuality(cookRecipe, false)) / 2.0);
+			if (isBranded) {
+				quality += 2;
+			}
 			int alc = (int) Math.round(cookRecipe.getAlcohol() * ((float) quality / 10.0f));
 			P.p.debugLog("cooked potion has Quality: " + quality + ", Alc: " + alc);
-			brew = new Brew(quality, alc, cookRecipe, this);
+			brew = new Brew(quality, alc, cookRecipe, this, isBranded);
 			BrewLore lore = new BrewLore(brew, potionMeta);
 			lore.updateQualityStars(false);
 			lore.updateCustomLore();

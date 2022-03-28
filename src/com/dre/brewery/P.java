@@ -144,7 +144,7 @@ public class P extends JavaPlugin {
 		inventoryListener = new InventoryListener();
 		worldListener = new WorldListener();
 		integrationListener = new IntegrationListener();
-		PluginCommand c = getCommand("Brewery");
+		PluginCommand c = getCommand("brew");
 		if (c != null) {
 			c.setExecutor(new CommandListener());
 			c.setTabCompleter(new TabListener());

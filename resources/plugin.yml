@@ -5,9 +5,8 @@ softdepend: [LWC, LogBlock, WorldGuard, GriefPrevention, Vault, ChestShop, Shopk
 authors: [Milan Albrecht, Frank Baumann, ProgrammerDan, Daniel Saukel]
 api-version: 1.13
 commands:
-  brewery:
+  brew:
     description: Mostly admin commands to create/modify Brews and drunkeness
-    aliases: [brew]
 permissions:
 # -- Groups --
 # User

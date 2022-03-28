@@ -168,7 +168,7 @@ public class BCauldron {
 			P.p.msg(player, P.p.languageReader.get("Perms_NoCauldronFill"));
 			return true;
 		}
-		ItemStack potion = ingredients.cook(state);
+		ItemStack potion = ingredients.cook(state, player);
 		if (potion == null) return false;
 
 		if (P.use1_13) {
