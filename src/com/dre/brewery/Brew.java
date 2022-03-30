@@ -385,20 +385,19 @@ public class Brew implements Cloneable {
 	 * calculating quality
 	 */
 	@Contract(pure = true)
-	public int calcQuality() {
+	public int calcQuality(ItemStack item) {
 		// calculate quality from all of the factors
 
 		float quality = ingredients.getIngredientQuality(currentRecipe) + ingredients.getCookingQuality(currentRecipe, distillRuns > 0);
-		if (isBranded) {
-			quality += 2;
-		}
 		if (currentRecipe.needsToAge() || ageTime > 0.5) {
 			quality += ingredients.getWoodQuality(currentRecipe, wood) + ingredients.getAgeQuality(currentRecipe, ageTime);
 			quality /= 4;
 		} else {
 			quality /= 2;
 		}
-
+		if (isBranded(item)) {
+			quality += 2;
+		}
 		return Math.round(quality);
 	}
 
@@ -576,6 +575,20 @@ public class Brew implements Cloneable {
 		return stripped && immutable;
 	}
 
+	public boolean isBranded(ItemStack item) {
+		List<String> lore = item.getItemMeta().getLore();
+		if (lore == null) {
+			return false;
+		}
+
+		for (String line : lore) {
+			if (line.contains("Product Of")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean needsSave() {
 		return needsSave;
 	}
@@ -592,11 +605,7 @@ public class Brew implements Cloneable {
 			throw new IllegalStateException("Cannot make stripped Brews non-static");
 		}
 		if (!P.use1_9 && currentRecipe != null && canDistill()) {
-			if (immutable) {
-				currentRecipe.getColor().colorBrew(((PotionMeta) potion.getItemMeta()), potion, false);
-			} else {
-				currentRecipe.getColor().colorBrew(((PotionMeta) potion.getItemMeta()), potion, true);
-			}
+			currentRecipe.getColor().colorBrew(((PotionMeta) potion.getItemMeta()), potion, !immutable);
 		}
 		this.immutable = immutable;
 	}
@@ -638,8 +647,7 @@ public class Brew implements Cloneable {
 		if (recipe != null) {
 			// distillRuns will have an effect on the amount of alcohol, not the quality
 			currentRecipe = recipe;
-			quality = calcQuality();
-
+			quality = calcQuality(slotItem);
 			lore.addOrReplaceEffects(getEffects(), quality);
 			potionMeta.setDisplayName(P.p.color("&f" + recipe.getName(quality)));
 			recipe.getColor().colorBrew(potionMeta, slotItem, canDistill());
@@ -711,8 +719,7 @@ public class Brew implements Cloneable {
 			BRecipe recipe = ingredients.getAgeRecipe(wood, ageTime, distillRuns > 0);
 			if (recipe != null) {
 				currentRecipe = recipe;
-				quality = calcQuality();
-
+				quality = calcQuality(item);
 				lore.addOrReplaceEffects(getEffects(), quality);
 				potionMeta.setDisplayName(P.p.color("&f" + recipe.getName(quality)));
 				recipe.getColor().colorBrew(potionMeta, item, canDistill());

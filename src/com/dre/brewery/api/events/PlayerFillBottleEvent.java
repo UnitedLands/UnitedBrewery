@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerFillBottleEvent extends PlayerEvent {
@@ -20,8 +19,6 @@ public class PlayerFillBottleEvent extends PlayerEvent {
 	public ItemStack getBottle() {
 		return bottle;
 	}
-
-
 
 	@NotNull
 	@Override
