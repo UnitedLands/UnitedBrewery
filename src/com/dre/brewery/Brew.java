@@ -396,7 +396,9 @@ public class Brew implements Cloneable {
 			quality /= 2;
 		}
 		if (isBranded(item)) {
-			quality += 2;
+			String breweryName = BUtil.getBreweryNameFromItem(item);
+			int breweryLevel = BUtil.getBreweryLevelFromName(breweryName);
+			quality += (breweryLevel * 2); // Each level grants 1 extra star, I.E 2 Quality Points
 		}
 		return Math.round(quality);
 	}
@@ -1016,8 +1018,8 @@ public class Brew implements Cloneable {
 	}
 
 	public void saveToStream(DataOutputStream out) throws IOException {
-		if (quality > 12) {
-			quality = 12;
+		if (quality > 20) {
+			quality = 20;
 		}
 		alc = Math.min(alc, Short.MAX_VALUE);
 		alc = Math.max(alc, Short.MIN_VALUE);

@@ -116,7 +116,7 @@ public class BEffect {
 	}
 
 	public int calcDuration(float quality) {
-		return (int) Math.round(minduration + ((maxduration - minduration) * (quality / 10.0)));
+		return (int) Math.round(minduration + ((maxduration - minduration) * (quality / 20.0)));
 	}
 
 	public int calcLvl(float quality) {

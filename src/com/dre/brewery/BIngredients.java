@@ -10,6 +10,7 @@ import com.dre.brewery.recipe.ItemLoader;
 import com.dre.brewery.recipe.PotionColor;
 import com.dre.brewery.recipe.RecipeItem;
 import com.dre.brewery.utility.BUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -122,7 +123,9 @@ public class BIngredients {
 			// Potion is best with cooking only
 			int quality = (int) Math.round((getIngredientQuality(cookRecipe) + getCookingQuality(cookRecipe, false)) / 2.0);
 			if (isBranded) {
-				quality += 2;
+				String breweryName = BUtil.getBreweryNameFromPlayer(player);
+				int breweryLevel = BUtil.getBreweryLevelFromName(breweryName);
+				quality = quality + (breweryLevel * 2);
 			}
 			int alc = (int) Math.round(cookRecipe.getAlcohol() * ((float) quality / 10.0f));
 			P.p.debugLog("cooked potion has Quality: " + quality + ", Alc: " + alc);

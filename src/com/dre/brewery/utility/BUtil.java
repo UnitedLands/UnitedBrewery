@@ -388,12 +388,25 @@ public class BUtil {
 		in.close();
 		out.close();
 	}
+	/* **************************************** */
+	/* *********                      ********* */
+	/* *********     Brewery Utils    ********* */
+	/* *********                      ********* */
+	/* **************************************** */
+
 
 	public static boolean hasBrewery(Player player) {
+		return getBreweryNameFromPlayer(player) != null;
+	}
+
+	public static int getBreweryLevelFromName(String breweryName) {
+		return getBreweriesConfig().getInt("breweries." + breweryName + ".level");
+	}
+
+	public static String getBreweryNameFromPlayer(Player player) {
 		FileConfiguration breweriesConfig = getBreweriesConfig();
 		String uuid = player.getUniqueId().toString();
 		Set<String> keys = breweriesConfig.getConfigurationSection("breweries").getKeys(true);
-
 		for (String key : keys) {
 			if (key.contains("owner-uuid") || key.contains("members")) {
 				if (uuid.equals(breweriesConfig.getString("breweries." + key)) ||
@@ -403,12 +416,23 @@ public class BUtil {
 					String ownerUUID = breweriesConfig.getString("breweries." + breweryName + ".owner-uuid");
 					List<String> members = breweriesConfig.getStringList("breweries." + breweryName + ".members");
 					if (ownerUUID.equals(uuid) || members.contains(uuid)) {
-						return true;
+						return breweryName;
 					}
 				}
 			}
 		}
-		return false;
+		return null;
+	}
+
+	public static String getBreweryNameFromItem(ItemStack item) {
+		List<String> lore = item.getItemMeta().getLore();
+		for (String line : lore) {
+			if (line.contains("Product Of")) {
+				// "Product Of Brewery" -> "Brewery"
+				return line.replace("Product Of ", "");
+			}
+		}
+		return null;
 	}
 
 	private static Plugin getUnitedBrands() {

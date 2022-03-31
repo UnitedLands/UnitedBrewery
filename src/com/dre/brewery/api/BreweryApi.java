@@ -81,8 +81,8 @@ public class BreweryApi {
 		if (drunkeness < 0) {
 			throw new IllegalArgumentException("Drunkeness can not be <0");
 		}
-		if (quality > 10) {
-			throw new IllegalArgumentException("Quality can not be >10");
+		if (quality > 20) {
+			throw new IllegalArgumentException("Quality can not be >20");
 		}
 		BPlayer bPlayer = BPlayer.get(player);
 		if (bPlayer == null && player != null) {

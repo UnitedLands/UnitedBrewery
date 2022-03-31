@@ -7,7 +7,6 @@ import com.dre.brewery.Brew;
 import com.dre.brewery.P;
 import com.dre.brewery.filedata.BConfig;
 import com.dre.brewery.utility.BUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -238,11 +237,17 @@ public class BrewLore {
 		}
 		int quality = brew.getQuality();
 
+		if (quality == 20) {
+			String masterBrew = "§lMASTER BREW";
+			addOrReplaceLore(Type.STARS, "§6", masterBrew);
+			return;
+		}
+
 		if (quality > 0 && (qualityColor || BConfig.alwaysShowQuality)) {
 			int stars = quality / 2;
 			boolean half = quality % 2 > 0;
-			int noStars = 6 - stars - (half ? 1 : 0);
-			StringBuilder b = new StringBuilder(30);
+			int noStars = 10 - stars - (half ? 1 : 0);
+			StringBuilder b = new StringBuilder(64);
 			String color;
 			if (qualityColor) {
 				color = getQualityColor(quality);

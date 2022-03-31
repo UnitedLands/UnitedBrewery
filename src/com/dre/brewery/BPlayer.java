@@ -652,7 +652,7 @@ public class BPlayer {
 	}
 
 	public void drunkEffects(Player player) {
-		int duration = 10 - getQuality();
+		int duration = 20 - getQuality();
 		duration += drunkeness / 2;
 		duration *= 5;
 		if (duration > 240) {

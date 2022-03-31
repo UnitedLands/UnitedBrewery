@@ -330,7 +330,7 @@ public class CommandListener implements CommandExecutor {
 		int quality = -1;
 		if (args.length > 2) {
 			quality = p.parseInt(args[2]);
-			if (quality < 1 || quality > 12) {
+			if (quality < 1 || quality > 20) {
 				p.msg(sender, p.languageReader.get("CMD_Player_Error"));
 				return;
 			}
@@ -664,22 +664,22 @@ public class CommandListener implements CommandExecutor {
 			return null;
 		}
 
-		int quality = 12;
+		int quality = 20;
 		boolean hasQuality = false;
 		String pName = null;
 		if (args.length > 2) {
 			quality = p.parseInt(args[args.length - 1]);
 
-			if (quality <= 0 || quality > 12) {
+			if (quality <= 0 || quality > 20) {
 				pName = args[args.length - 1];
 				if (args.length > 3) {
 					quality = p.parseInt(args[args.length - 2]);
 				}
 			}
-			if (quality > 0 && quality <= 12) {
+			if (quality > 0 && quality <= 20) {
 				hasQuality = true;
 			} else {
-				quality = 12;
+				quality = 20;
 			}
 		}
 		Player player = null;
