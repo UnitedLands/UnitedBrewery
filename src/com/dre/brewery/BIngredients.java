@@ -131,7 +131,7 @@ public class BIngredients {
 			P.p.debugLog("cooked potion has Quality: " + quality + ", Alc: " + alc);
 			brew = new Brew(quality, alc, cookRecipe, this, isBranded);
 			BrewLore lore = new BrewLore(brew, potionMeta);
-			lore.updateQualityStars(false);
+			lore.updateQualityStars(true);
 			lore.updateCustomLore();
 			lore.updateAlc(false);
 			lore.addOrReplaceEffects(brew.getEffects(), brew.getQuality());

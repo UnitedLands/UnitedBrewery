@@ -238,8 +238,8 @@ public class BrewLore {
 		int quality = brew.getQuality();
 
 		if (quality == 20) {
-			String masterBrew = "§lMASTER BREW";
-			addOrReplaceLore(Type.STARS, "§6", masterBrew);
+			String masterBrew = "MASTER BREW";
+			addOrReplaceLore(Type.STARS, "§x§F§F§D§7§0§0§l", masterBrew);
 			return;
 		}
 
@@ -302,7 +302,7 @@ public class BrewLore {
 		if (toQuality && brew.isUnlabeled()) {
 			return;
 		}
-		updateQualityStars(toQuality);
+		updateQualityStars(true);
 
 		// Ingredients
 		updateIngredientLore(toQuality);
@@ -503,10 +503,12 @@ public class BrewLore {
 	 */
 	public static String getQualityColor(int quality) {
 		String color;
-		if (quality > 8) {
-			color = "&a";
-		} else if (quality > 6) {
-			color = "&e";
+		if (quality == 20) {
+			color = "§x§F§F§D§7§0§0";
+		} else if (quality > 10) {
+			color = "§x§C§0§C§0§C§0";
+		} else if (quality > 8) {
+			color = "§x§C§D§7§F§3§2";
 		} else if (quality > 4) {
 			color = "&6";
 		} else if (quality > 2) {

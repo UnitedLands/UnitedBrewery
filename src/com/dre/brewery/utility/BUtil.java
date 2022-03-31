@@ -429,7 +429,9 @@ public class BUtil {
 		for (String line : lore) {
 			if (line.contains("Product Of")) {
 				// "Product Of Brewery" -> "Brewery"
-				return line.replace("Product Of ", "");
+				String breweryName = line.replace("Product Of ", "");
+				// Stripping colors because otherwise it checks wrongly.
+				return ChatColor.stripColor(breweryName);
 			}
 		}
 		return null;
