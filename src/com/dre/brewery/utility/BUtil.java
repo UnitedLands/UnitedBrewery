@@ -400,21 +400,21 @@ public class BUtil {
 	}
 
 	public static int getBreweryLevelFromName(String breweryName) {
-		return getBreweriesConfig().getInt("breweries." + breweryName + ".level");
+		return getBreweriesConfig().getInt(breweryName + ".level");
 	}
 
 	public static String getBreweryNameFromPlayer(Player player) {
 		FileConfiguration breweriesConfig = getBreweriesConfig();
 		String uuid = player.getUniqueId().toString();
-		Set<String> keys = breweriesConfig.getConfigurationSection("breweries").getKeys(true);
+		Set<String> keys = breweriesConfig.getKeys(true);
 		for (String key : keys) {
 			if (key.contains("owner-uuid") || key.contains("members")) {
-				if (uuid.equals(breweriesConfig.getString("breweries." + key)) ||
-					breweriesConfig.getStringList("breweries." + key).contains(uuid)) {
+				if (uuid.equals(breweriesConfig.getString(key)) ||
+					breweriesConfig.getStringList(key).contains(uuid)) {
 					// MyBrand.owner-uuid -> [MyBrand, owner-uuid] -> MyBrand. Fuck this
 					String breweryName = key.split("\\.")[0];
-					String ownerUUID = breweriesConfig.getString("breweries." + breweryName + ".owner-uuid");
-					List<String> members = breweriesConfig.getStringList("breweries." + breweryName + ".members");
+					String ownerUUID = breweriesConfig.getString(breweryName + ".owner-uuid");
+					List<String> members = breweriesConfig.getStringList(breweryName + ".members");
 					if (ownerUUID.equals(uuid) || members.contains(uuid)) {
 						return breweryName;
 					}
