@@ -239,7 +239,7 @@ public class BrewLore {
 
 		if (quality == 20) {
 			String masterBrew = "MASTER BREW";
-			addOrReplaceLore(Type.STARS, "§x§F§F§D§7§0§0§l", masterBrew);
+			addOrReplaceLore(Type.STARS, "§x§B§9§F§2§F§F§l", masterBrew);
 			return;
 		}
 
@@ -504,15 +504,13 @@ public class BrewLore {
 	public static String getQualityColor(int quality) {
 		String color;
 		if (quality == 20) {
+			color = "§x§B§9§F§2§F§F";
+		} else if (quality > 12) {
 			color = "§x§F§F§D§7§0§0";
-		} else if (quality > 10) {
-			color = "§x§C§0§C§0§C§0";
 		} else if (quality > 8) {
-			color = "§x§C§D§7§F§3§2";
-		} else if (quality > 4) {
-			color = "&6";
-		} else if (quality > 2) {
-			color = "&c";
+			color = "§x§C§0§C§0§C§0";
+		} else if (quality > 6) {
+			color = "&x&C&D&7&F&3&2";
 		} else {
 			color = "&4";
 		}
