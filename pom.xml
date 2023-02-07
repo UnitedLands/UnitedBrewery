@@ -247,6 +247,12 @@
 			<version>RC-24</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.unitedlands.brands</groupId>
+			<artifactId>UnitedBrands</artifactId>
+			<version>4.0</version>
+			<scope>provided</scope>
+		</dependency>
 		<!--<dependency>
 			Contains proprietary api that we use for integration
 			<groupId>com.dre</groupId>
